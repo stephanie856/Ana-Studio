@@ -1,0 +1,7 @@
+{
+  "name": "Ana Sticker Generator",
+  "description": "An AI-powered application that generates consistent character stickers of 'Ana' with customizable poses, outfits, expressions, and text overlays.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
