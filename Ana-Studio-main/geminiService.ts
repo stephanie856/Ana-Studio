@@ -3,7 +3,7 @@ import { GoogleGenAI } from "@google/genai";
 import { GenerationSettings, TextOverlay } from "./types";
 import { SYSTEM_INSTRUCTIONS } from "./constants";
 
-const GOOGLE_AI_API_KEY = 'AIzaSyBl4WjK-q3M2QauQKWzHRVRiS_AIU88zcw';
+const GOOGLE_AI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || '';
 
 export const generateAnaSticker = async (settings: GenerationSettings, textOverlay?: TextOverlay): Promise<string> => {
   const ai = new GoogleGenAI({ apiKey: GOOGLE_AI_API_KEY });

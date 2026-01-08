@@ -7,8 +7,8 @@ export interface DriveFile {
   downloadUrl?: string;
 }
 
-let CLIENT_ID = '690188678388-vfs077ia6jspbdp2pr24foavnvsnhb16.apps.googleusercontent.com';
-let API_KEY = 'AIzaSyABDRW2AwRmWhxCKinW7-_0yQ8vdgBRh40';
+let CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '690188678388-vfs077ia6jspbdp2pr24foavnvsnhb16.apps.googleusercontent.com';
+let API_KEY = import.meta.env.VITE_GOOGLE_API_KEY || '';
 const SCOPES = 'https://www.googleapis.com/auth/drive.file';
 
 let gapiInited = false;
