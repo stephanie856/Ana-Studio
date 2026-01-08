@@ -8,7 +8,7 @@ export interface DriveFile {
 }
 
 let CLIENT_ID = '690188678388-vfs077ia6jspbdp2pr24foavnvsnhb16.apps.googleusercontent.com';
-let API_KEY = 'YOUR_GOOGLE_API_KEY';
+let API_KEY = 'AIzaSyABDRW2AwRmWhxCKinW7-_0yQ8vdgBRh40';
 const SCOPES = 'https://www.googleapis.com/auth/drive.file';
 
 let gapiInited = false;
