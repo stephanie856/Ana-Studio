@@ -5,6 +5,46 @@ import { SYSTEM_INSTRUCTIONS } from "./constants";
 
 const GOOGLE_AI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || '';
 
+// Dynamically import all Ana reference images using Vite's glob import
+const anaReferenceImages = import.meta.glob('/public/ana-references/*.{png,jpg,jpeg}', { eager: true, as: 'url' });
+
+// Load Ana reference images - automatically detects all images in the folder
+const loadReferenceImages = async (): Promise<Array<{ inlineData: { mimeType: string, data: string } }>> => {
+  const imageParts = [];
+  
+  // Get all image URLs from the glob import
+  const imageUrls = Object.values(anaReferenceImages);
+  
+  console.log(`Loading ${imageUrls.length} Ana reference images...`);
+  
+  for (const imageUrl of imageUrls) {
+    try {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      const base64 = await new Promise<string>((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64String = (reader.result as string).split(',')[1];
+          resolve(base64String);
+        };
+        reader.readAsDataURL(blob);
+      });
+      
+      imageParts.push({
+        inlineData: {
+          mimeType: blob.type || 'image/png',
+          data: base64
+        }
+      });
+    } catch (error) {
+      console.warn(`Could not load reference image from ${imageUrl}`, error);
+    }
+  }
+  
+  console.log(`Successfully loaded ${imageParts.length} Ana reference images`);
+  return imageParts;
+};
+
 export const generateAnaSticker = async (settings: GenerationSettings, textOverlay?: TextOverlay): Promise<string> => {
   const ai = new GoogleGenAI({ apiKey: GOOGLE_AI_API_KEY });
   
@@ -49,18 +89,28 @@ export const generateAnaSticker = async (settings: GenerationSettings, textOverl
     ╔══════════════════════════════════════════════════════════════════════╗
     ║ *** CHARACTER IDENTITY: ANA (MUST BE CONSISTENT) ***                ║
     ║ YOU MUST ONLY GENERATE "ANA" - THE SAME CHARACTER EVERY TIME       ║
-    ║ DO NOT CREATE NEW CHARACTERS OR DIFFERENT PEOPLE                    ║
+    ║ USE THE PROVIDED REFERENCE IMAGES - DO NOT MAKE UP YOUR OWN       ║
     ╚══════════════════════════════════════════════════════════════════════╝
     
-    CHARACTER IDENTITY (CRITICAL - MUST FOLLOW EXACTLY):
-    - Character Name: Ana (this is the ONLY character you generate)
-    - Ana is a specific, consistent character with defined features
-    - Deep, rich warm medium-brown skin tone (#8B6F47)
-    - Natural almond-shaped brown eyes (proportional to face)
-    - Always wears large gold hoop earrings
+    *** CRITICAL: REFERENCE IMAGES PROVIDED ***
+    I have provided reference images of Ana showing her with different hairstyles and in different settings.
+    ALL images in the ana-references folder are included automatically.
+    
+    MANDATORY INSTRUCTIONS:
+    - You MUST base the character ONLY on the reference images provided
+    - Study Ana's facial features, skin tone, and style from the reference images
+    - DO NOT create your own interpretation or "go rogue"
+    - DO NOT generate a different person or random character
+    - MATCH her appearance exactly as shown in the reference photos
+    - Every sticker MUST be recognizably the same person shown in the references
+    - Use the reference images to understand Ana's consistent features across different hairstyles
+    
+    CHARACTER IDENTITY (From Reference Images):
+    - Character Name: Ana (shown in the provided reference images)
+    - Study her skin tone, facial features, and proportions from the references
+    - Always wears large gold hoop earrings (as seen in references)
     - Modern, relatable, confident Black woman
-    - DO NOT generate random people or different characters
-    - Every sticker MUST be recognizably the same person: Ana
+    - Match the visual style and quality shown in the reference images
     
     *** CRITICAL TEXT REQUIREMENT (APPLIES TO ALL FORMATS) ***
     ${textInstructions}
@@ -115,10 +165,19 @@ export const generateAnaSticker = async (settings: GenerationSettings, textOverl
   };
 
   try {
+    // Load reference images
+    const referenceImages = await loadReferenceImages();
+    
+    // Construct the parts array with reference images first, then the prompt
+    const parts = [
+      ...referenceImages,
+      { text: constructedPrompt }
+    ];
+    
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash-image',
       contents: {
-        parts: [{ text: constructedPrompt }]
+        parts: parts
       },
       config: {
         imageConfig: {
