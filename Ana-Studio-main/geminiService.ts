@@ -61,12 +61,13 @@ export const generateAnaSticker = async (settings: GenerationSettings, textOverl
     
     TEXT BACKGROUND STYLE: ${textOverlay.backgroundStyle || 'none'}
     ${textOverlay.backgroundStyle === 'offset-border' ? `
-    OFFSET BORDER STYLE (Cricut-style):
-    - Create thick WHITE BORDER/STROKE around each letter (${textOverlay.offsetWidth}px offset)
-    - Letters have colored fill with thick white stroke/outline
-    - No background box - just the offset stroke effect
+    OFFSET BORDER STYLE (Cricut-style) - TEXT ONLY:
+    - Create thick WHITE BORDER/STROKE around EACH TEXT LETTER ONLY (${textOverlay.offsetWidth}px offset)
+    - Text letters have colored fill with thick white stroke/outline
+    - No background box - just the offset stroke effect on the TEXT
     - lineJoin = 'round' makes letter borders connect smoothly
-    - Result looks like professional Cricut cut sticker with embossed white outline
+    - DO NOT apply white borders to the character/person - only to the text
+    - Result: Text looks like professional Cricut cut sticker with embossed white outline
     ` : textOverlay.backgroundStyle === 'speech-bubble' ? `
     SPEECH BUBBLE STYLE:
     - Rounded organic white background that follows text contours
@@ -143,11 +144,11 @@ export const generateAnaSticker = async (settings: GenerationSettings, textOverl
     COMPOSITION & FORMAT:
     - Format: ${settings.format}
     - ${settings.format === 'Classic Rectangle' ? 'Rectangular format: The entire scene in a rectangular frame with clean white border and softly rounded corners.' : ''}
-    - ${settings.format === 'Die-Cut Square' ? 'DIE-CUT SQUARE format: The character, props, AND TEXT all contained within a perfect SQUARE (1:1 ratio) with a thick, clean white die-cut border around the ENTIRE composition.' : ''}
-    - ${settings.format === 'Die-Cut Landscape' ? 'DIE-CUT LANDSCAPE format: Wide rectangular (16:9 aspect ratio) with thick, clean white die-cut border around character, props, and TEXT.' : ''}
-    - ${settings.format === 'Die-Cut Vertical' ? 'DIE-CUT VERTICAL format: Tall rectangular (9:16 aspect ratio) with thick, clean white die-cut border around character, props, and TEXT.' : ''}
+    - ${settings.format === 'Die-Cut Square' ? 'DIE-CUT SQUARE format: The character, props, AND TEXT all contained within a perfect SQUARE (1:1 ratio) with a thick, clean white die-cut border ONLY around the OUTER EDGE of the entire sticker composition. DO NOT put white borders around the character itself.' : ''}
+    - ${settings.format === 'Die-Cut Landscape' ? 'DIE-CUT LANDSCAPE format: Wide rectangular (16:9 aspect ratio) with thick, clean white die-cut border ONLY around the OUTER PERIMETER. DO NOT add white outlines to the character.' : ''}
+    - ${settings.format === 'Die-Cut Vertical' ? 'DIE-CUT VERTICAL format: Tall rectangular (9:16 aspect ratio) with thick, clean white die-cut border ONLY around the OUTER EDGE. DO NOT outline the character in white.' : ''}
     - ${settings.format === 'Circular Vignette' ? 'Circular vignette: Scene contained within a soft circular frame with a subtle fade at the edges.' : ''}
-    - If Die-Cut format: Ensure the white border is clean, consistent thickness, and surrounds ALL elements including the text
+    - CRITICAL: Die-cut white border is ONLY on the exterior edge of the sticker, NOT around individual elements like the character
     - High resolution output for all formats
 
     ${SYSTEM_INSTRUCTIONS}
