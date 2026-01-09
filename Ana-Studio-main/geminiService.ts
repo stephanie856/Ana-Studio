@@ -1,4 +1,3 @@
-
 import { GoogleGenAI } from "@google/genai";
 import { GenerationSettings, TextOverlay } from "./types";
 import { SYSTEM_INSTRUCTIONS } from "./constants";
@@ -96,7 +95,16 @@ export const generateAnaSticker = async (settings: GenerationSettings, textOverl
     *** CRITICAL: REFERENCE IMAGES PROVIDED ***
     I have provided reference images of Ana showing her with different hairstyles and in different settings.
     ALL images in the ana-references folder are included automatically.
-    
+
+    *** ABSOLUTE STYLE REQUIREMENT (NO EXCEPTIONS) ***
+    - You MUST COPY the style, texture, and realism of the provided reference images EXACTLY.
+    - The output must look like it was created by the same artist, in the same medium, as the reference images.
+    - DO NOT use cartoon, comic, anime, or simplified illustration styles.
+    - DO NOT use flat colors, exaggerated features, or any stylization not present in the reference images.
+    - DO NOT invent, interpret, or "go rogue" in any way. NO new characters, NO new styles, NO new features.
+    - DO NOT change Ana's skin tone, facial features, or proportions from what is shown in the reference images.
+    - If you cannot match the style and realism of the reference images, do not generate anything.
+
     MANDATORY INSTRUCTIONS:
     - You MUST base the character ONLY on the reference images provided
     - Study Ana's facial features, skin tone, and style from the reference images
