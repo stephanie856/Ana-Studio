@@ -51,7 +51,7 @@ export const generateAnaSticker = async (settings: GenerationSettings, textOverl
   const textInstructions = textOverlay ? `
     ╔════════════════════════════════════════════════════════════════════╗
     ║ *** TEXT RENDERING WITH BACKGROUND STYLE ***                      ║
-    ║ Background Style: ${textOverlay.backgroundStyle.toUpperCase()}     ║
+    ║ Background Style: ${textOverlay.backgroundStyle?.toUpperCase() || 'NONE'}     ║
     ╚════════════════════════════════════════════════════════════════════╝
     
     TEXT STYLING SPECIFICATIONS:
@@ -59,7 +59,7 @@ export const generateAnaSticker = async (settings: GenerationSettings, textOverl
     - Sub Text: "${textOverlay.subText}" (below main text, smaller than main text)
     - Text Color: Main text in ${textOverlay.colorMain}, sub text in ${textOverlay.colorSub}
     
-    TEXT BACKGROUND STYLE: ${textOverlay.backgroundStyle}
+    TEXT BACKGROUND STYLE: ${textOverlay.backgroundStyle || 'none'}
     ${textOverlay.backgroundStyle === 'offset-border' ? `
     OFFSET BORDER STYLE (Cricut-style):
     - Create thick WHITE BORDER/STROKE around each letter (${textOverlay.offsetWidth}px offset)
